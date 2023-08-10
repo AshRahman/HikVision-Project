@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Text Streaming in Flask</title>
+  </head>
+
+  <body>
+    <h1>Streaming Text:</h1>
+    <div id="streamed-text"</div>
+    <p id="dynamic-text"></p>
+    <img id="dynamic-image" src="" alt="Dynamic Image">
+    <script>
+      const streamedText = document.getElementById("streamed-text");
+      console.log(streamedText)
+      const evtSource = new EventSource("/get_data");
+
+      evtSource.onmessage = function (event) {
+        var eventData = event.data;
+        var img = document.getElementById('dynamic-image');
+        //img.src = "D:\\Pomodoro-Timer\\" + event.data + '.jpg';
+        //img.src = '{{ url_for("static", filename="images/' + event.data + '.jpg") }}';
+        img.src = '{{ url_for("static", filename="images") }}/' + eventData + '.jpg'
+        img.alt = eventData;
+        var text = document.getElementById('dynamic-text');
+        text.textContent = eventData;
+        //streamedText.appendChild(img);
+        //const newLine = document.createElement("p");
+        //newLine.src = event.data; // Adjust the path to your image
+        //newLine.alt = 'My Image';
+        //newLine.textContent = eventData;
+        //var result = eval(event.data);
+        //console.log(result);
+        //streamedText.appendChild(newLine);
+        //const newLine = document.createElement("p");
+        //newLine.textContent = event.data;
+        //streamedText.appendChild(newLine)
+      };
+    </script>
+  </body>
+</html>
