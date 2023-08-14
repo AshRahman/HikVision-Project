@@ -20,8 +20,8 @@ personId = None
 personName = None
 picUrl = None
 b64pic = None
-person_data = {"data": {"personName": None, "personPhoto": {"picUri": None}}}
-
+person_data = {"data": {"personName": None, "personId":None}}
+pID= ""
 
 @app.route("/event", methods=["POST"])
 def handle_event():
@@ -34,7 +34,11 @@ def handle_event():
         personCode = data["params"]["events"][0]["data"][
             "personCode"
         ]  # Person Code required for the PersonInfo API
+        person_data["data"]["personId"] = data["params"]["events"][0]["data"][
+            "personId"
+        ]
         print("Personcode is:"+personCode)
+        print("PersonID is:"+person_data["data"]["personId"])
         
          # -------------------------------------------------------------
          ## Below code call the API to find the person information by PersonID
@@ -122,21 +126,26 @@ def serve_image(filename):
 
 def generate():
     global b64pic
+    global pID
+    print("personID"+pID)
     while True:
         #pID=data_final["data"]["personId"]
         # Send the received_data as an SSE event
-        #if person_id != "-1":
-        if person_data['data']['personName']:
+        if person_data["data"]["personId"] != '-1':
+        #if person_data['data']['personName']:
             yield f"data: {person_data['data']['personName']}\n\n"
-            person_data["data"]["personName"] = None
+            person_data["data"]["personName"] = "next"
             
         else:
-             person_data["data"]["personName"] = "Stranger"
-             yield f"data: {person_data['data']['personName']}\n\n"
+            #  person_data["data"]["personName"] = "Stranger"
+             yield f"data:Stranger\n\n"
+             #person_data["data"]["personId"]= ""
+             person_data["data"]["personName"] = "next"
+             person_data["data"]["personId"] = ""
              
              
         
-        time.sleep(3)
+        time.sleep(2)
         # yield f"output.jpg"
           # Add a delay to avoid overloading the server
 
