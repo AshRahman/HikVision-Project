@@ -14,9 +14,10 @@
       const streamedText = document.getElementById("streamed-text");
       console.log(streamedText)
       const evtSource = new EventSource("/get_data");
-
+      console.log(evtSource)
       evtSource.onmessage = function (event) {
         var eventData = event.data;
+        console.log (eventData)
         var img = document.getElementById('dynamic-image');
         //img.src = "D:\\Pomodoro-Timer\\" + event.data + '.jpg';
         //img.src = '{{ url_for("static", filename="images/' + event.data + '.jpg") }}';

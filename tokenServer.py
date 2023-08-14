@@ -58,6 +58,7 @@ def handle_event():
         pic_uri = data_final["data"]["personPhoto"]["picUri"]
         # Print the extracted values
         print("Person ID:", person_id)
+        print(type(person_id))
         print("Person Code:", person_code)
         print("Person Name:", person_name)
         print("Pic URI:", pic_uri)
@@ -95,6 +96,7 @@ def handle_event():
         print(f"Image saved as '{person_name}.jpg'")
         
         person_data["data"]["personName"] = person_name
+        person_data["data"]["personCode"] = personCode
         person_data["data"]["personPhoto"]["picUri"] = b64pic
         print(person_data["data"]["personName"])
         print(type(person_data))
@@ -121,24 +123,22 @@ def serve_image(filename):
 def generate():
     global b64pic
     while True:
+        #pID=data_final["data"]["personId"]
         # Send the received_data as an SSE event
+        #if person_id != "-1":
         if person_data['data']['personName']:
-            temp=person_data['data']['personName']
             yield f"data: {person_data['data']['personName']}\n\n"
+            person_data["data"]["personName"] = None
+            
         else:
              person_data["data"]["personName"] = "Stranger"
              yield f"data: {person_data['data']['personName']}\n\n"
+             
+             
+        
+        time.sleep(3)
         # yield f"output.jpg"
-        time.sleep(2)  # Add a delay to avoid overloading the server
-
-
-# def send_name():
-#     global b64pic
-#     while True:
-#         # Send the received_data as an SSE event
-#         yield f"{person_data['data']}\n"
-#         # yield f"output.jpg"
-#         time.sleep(2)  # Add a delay to avoid overloading the server
+          # Add a delay to avoid overloading the server
 
 
 @app.route("/get_data", methods=["GET"])
