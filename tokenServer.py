@@ -54,7 +54,7 @@ def handle_event():
             "POST", url, headers=headers, data=payload, verify=False
         )
         received_data = response.text
-        print("Recieved Data:"+received_data)
+        print("Received Data:"+received_data)
         data_final = json.loads(received_data)
         person_id = data_final["data"]["personId"]
         person_code = data_final["data"]["personCode"]
@@ -100,8 +100,9 @@ def handle_event():
         print(f"Image saved as '{person_name}.jpg'")
         
         person_data["data"]["personName"] = person_name
-        person_data["data"]["personCode"] = personCode
-        person_data["data"]["personPhoto"]["picUri"] = b64pic
+        person_data["data"]["personId"] = person_id
+        #person_data["data"]["personCode"] = personCode
+        #person_data["data"]["personPhoto"]["picUri"] = b64pic
         print(person_data["data"]["personName"])
         print(type(person_data))
             # ---------------------------------------------------------------
@@ -133,19 +134,27 @@ def generate():
         # Send the received_data as an SSE event
         if person_data["data"]["personId"] != '-1':
         #if person_data['data']['personName']:
-            yield f"data: {person_data['data']['personName']}\n\n"
+            json_data = json.dumps(person_data)
+            yield f"data: {json_data}\n\n"
+            print(json_data)
             person_data["data"]["personName"] = "next"
+            person_data["data"]["personId"] = ""
+            #time.sleep(2)
             
         else:
-            #  person_data["data"]["personName"] = "Stranger"
-             yield f"data:Stranger\n\n"
+             person_data["data"]["personName"] = "Stranger"
+             person_data["data"]["personId"] = ""
+             json_data = json.dumps(person_data)
+             print(json_data)
+             yield f"data: {json_data}\n\n"
              #person_data["data"]["personId"]= ""
              person_data["data"]["personName"] = "next"
              person_data["data"]["personId"] = ""
+             #time.sleep(2)
              
              
-        
         time.sleep(2)
+        
         # yield f"output.jpg"
           # Add a delay to avoid overloading the server
 
