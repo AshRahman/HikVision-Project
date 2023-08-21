@@ -172,4 +172,4 @@ def get_data():
 
 if __name__ == "__main__":
     # Change host and port as needed
-    app.run(host="192.168.200.19", port=8089)
+    app.run(host="127.0.0.1", port=8089)
