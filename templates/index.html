@@ -2,14 +2,27 @@
 <html>
   <head>
     <title>Access Control</title>
+    <link rel="stylesheet" href="css/bootstrap.css" />
   </head>
   <body>
     <h1>Gate 1</h1>
     <div id="streamed-text"></div>
     <p id="dynamic-text"></p>
     <p id="dynamic-id"></p>
-    <img id="dynamic-image" src="" alt="Dynamic Image" />
+    <div class="d-flex align-items-center">
+      <img
+        id="dynamic-image"
+        class="rounded mx-auto d-block"
+        alt="Dynamic Image"
+      />
+    </div>  
     <p id="current-time"></p>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/bootstrap.js"></script>
     <script>
       const streamedText = document.getElementById("streamed-text");
       const evtSource = new EventSource("/get_data");
