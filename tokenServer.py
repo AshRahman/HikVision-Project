@@ -45,8 +45,8 @@ def handle_event():
         url = "https://127.0.0.1/artemis/api/resource/v1/person/personCode/personInfo"
         payload = json.dumps({f"personCode": personCode})
         headers = {
-            "x-ca-key": "20942152",
-            "x-ca-signature": "fBb++H9TnmkutgMtnQgNyNGR4q5RxVSbCb7lwW6Zzlg=",
+            "x-ca-key": "29902319",
+            "x-ca-signature": "yXZDybyWyUOtCZ6T6QjOGn8qrFp6Cj9rXCclWSyhu5g=",
             "x-ca-signature-headers": "x-ca-key",
             "Content-Type": "application/json",
         }
@@ -76,8 +76,8 @@ def handle_event():
             }
         )
         pic_headers = {
-            "x-ca-key": "20942152",
-            "x-ca-signature": "9AIUX/5aX4eqW3bpE++N2fvKW3t8Cvk8gEP5YcBxoek=",
+            "x-ca-key": "29902319",
+            "x-ca-signature": "eLWynLKAmBKHEAixbUJvEXseB3Iz+rvZrRQeBKxqm6E=",
             "x-ca-signature-headers": "x-ca-key",
             "Content-Type": "application/json",
         }
@@ -172,4 +172,4 @@ def get_data():
 
 if __name__ == "__main__":
     # Change host and port as needed
-    app.run(host="192.168.200.19", port=8089)
+    app.run(host="127.0.0.1", port=8089)
