@@ -101,8 +101,6 @@ def handle_event():
         
         person_data["data"]["personName"] = person_name
         person_data["data"]["personId"] = person_id
-        #person_data["data"]["personCode"] = personCode
-        #person_data["data"]["personPhoto"]["picUri"] = b64pic
         print(person_data["data"]["personName"])
         print(type(person_data))
             # ---------------------------------------------------------------
@@ -172,4 +170,4 @@ def get_data():
 
 if __name__ == "__main__":
     # Change host and port as needed
-    app.run(host="127.0.0.1", port=8089)
+    app.run(host="192.168.0.164", port=8089)
