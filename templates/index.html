@@ -17,46 +17,23 @@
       .card:hover {
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
       }
-      .custom-header-bg {
-        background-color: #009879;
-        color: white;
-      }
+
     </style>
   </head>
   <body>
-    <div class="container mt-5">
-      <h1 class="text-center">Gate 1 Entry Log</h1>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Entry Log</h5>
-          <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-              <thead class="custom-header-bg">
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Image</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td id="dynamic-id"></td>
-                  <td>
-                    <img id="dynamic-image" alt="Dynamic Image" width="1000" />
-                  </td>
-                  <td id="dynamic-text"></td>
-                  <td id="current-time"></td>
-                </tr>
-                <tr>
-                  <td id="dynamic-t"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+
+  <div class="container p-4">
+    <div class="card" style="width: 18rem;">
+      <img width="50" id="dynamic-image" alt="Dynamic Image" class="card-img-top" style="height: 70%;" alt="Image">
+      <div class="card-body">
+         <h5 class="card-title">Name:</h5>
+        <h5 class="card-text" id="dynamic-text"></h5>
+        <h5 class="card-title">ID:</h5>
+        <h5 class="card-text" id="dynamic-id"></h5>
       </div>
     </div>
+  </div>
+
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
