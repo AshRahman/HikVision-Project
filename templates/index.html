@@ -17,23 +17,27 @@
       .card:hover {
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
       }
-
     </style>
   </head>
   <body>
-
-  <div class="container p-4">
-    <div class="card" style="width: 18rem;">
-      <img width="50" id="dynamic-image" alt="Dynamic Image" class="card-img-top" style="height: 70%;" alt="Image">
-      <div class="card-body">
-         <h5 class="card-title">Name:</h5>
-        <h5 class="card-text" id="dynamic-text"></h5>
-        <h5 class="card-title">ID:</h5>
-        <h5 class="card-text" id="dynamic-id"></h5>
+    <div class="container p-4">
+      <div class="card" style="width: 18rem">
+        <img
+          width="50"
+          id="dynamic-image"
+          alt="Dynamic Image"
+          class="card-img-top"
+          style="height: 70%"
+          alt="Image"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Name:</h5>
+          <h5 class="card-text" id="dynamic-text"></h5>
+          <h5 class="card-title">ID:</h5>
+          <h5 class="card-text" id="dynamic-id"></h5>
+        </div>
       </div>
     </div>
-  </div>
-
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -42,7 +46,6 @@
     ></script>
     <script src="js/bootstrap.js"></script>
     <script>
-      const streamedText = document.getElementById("streamed-text");
       const evtSource = new EventSource("/get_data");
       evtSource.onmessage = function (event) {
         var eventData = JSON.parse(event.data);
@@ -50,10 +53,6 @@
         var img = document.getElementById("dynamic-image");
         var text = document.getElementById("dynamic-text");
         var id = document.getElementById("dynamic-id");
-        var currentTime = document.getElementById("current-time");
-        var now = new Date();
-        var timeString = now.toLocaleTimeString();
-        currentTime.textContent = " " + timeString;
 
         img.src =
           '{{ url_for("static", filename="images") }}/' +

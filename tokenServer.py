@@ -136,7 +136,7 @@ def generate():
             yield f"data: {json_data}\n\n"
             print(json_data)
             person_data["data"]["personName"] = "next"
-            person_data["data"]["personId"] = ""
+            person_data["data"]["personId"] = " "
             #time.sleep(2)
             
         else:
@@ -147,7 +147,7 @@ def generate():
              yield f"data: {json_data}\n\n"
              #person_data["data"]["personId"]= ""
              person_data["data"]["personName"] = "next"
-             person_data["data"]["personId"] = ""
+             person_data["data"]["personId"] = " "
              #time.sleep(2)
              
              
@@ -170,4 +170,4 @@ def get_data():
 
 if __name__ == "__main__":
     # Change host and port as needed
-    app.run(host="192.168.0.164", port=8089)
+    app.run(host="127.0.0.1", port=8089)
