@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Access Control</title>
+  </head>
+
+  <body>
+    <h1>Gate 1</h1>
+    <div id="streamed-text"</div>
+    <p id="dynamic-text"></p>
+    <img id="dynamic-image" src="" alt="Dynamic Image">
+    <script>
+      const streamedText = document.getElementById("streamed-text");
+      console.log(streamedText)
+      const evtSource = new EventSource("/get_data");
+      console.log(evtSource)
+      evtSource.onmessage = function (event) {
+        var eventData = event.data;
+        console.log (eventData)
+        var img = document.getElementById('dynamic-image');
+        //img.src = "D:\\Pomodoro-Timer\\" + event.data + '.jpg';
+        //img.src = '{{ url_for("static", filename="images/' + event.data + '.jpg") }}';
+        img.src = '{{ url_for("static", filename="images") }}/' + eventData.data.personName + '.jpg'
+        img.alt = eventData.data.personName;
+        var text = document.getElementById('dynamic-text');
+        text.textContent = eventData.data.personName;
+        //streamedText.appendChild(img);
+        //const newLine = document.createElement("p");
+        //newLine.src = event.data; // Adjust the path to your image
+        //newLine.alt = 'My Image';
+        //newLine.textContent = eventData;
+        //var result = eval(event.data);
+        //console.log(result);
+        //streamedText.appendChild(newLine);
+        //const newLine = document.createElement("p");
+        //newLine.textContent = event.data;
+        //streamedText.appendChild(newLine)
+      };
+    </script>
+  </body>
+</html>

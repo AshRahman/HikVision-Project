@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket.IO Data</title>
+  </head>
+  <body>
+    <h1>Data from Socket.IO:</h1>
+    <div id="data-container">
+      <!-- Data received from the server will be displayed here -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+      // Connect to the Socket.IO server
+      const socket = io.connect("http://192.168.249.254:8089/get_data");
+
+      // Listen for the initial_data event
+      socket.on("initial_data", function (data) {
+        // Parse and display the initial data
+        const parsedData = JSON.parse(data);
+        displayData(parsedData);
+      });
+
+      // Listen for the update_data event
+      socket.on("update_data", function (data) {
+        // Parse and display the updated data
+        const parsedData = JSON.parse(data);
+        displayData(parsedData);
+      });
+
+      // Function to display data in the data-container
+      function displayData(data) {
+        const dataContainer = document.getElementById("data-container");
+        dataContainer.innerHTML = `
+                <p>Person Name: ${data.data.personName}</p>
+                <p>Person ID: ${data.data.personId}</p>
+                <!-- Add more fields as needed -->
+            `;
+      }
+    </script>
+  </body>
+</html>
