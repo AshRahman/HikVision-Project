@@ -21,11 +21,13 @@ personName = None
 picUrl = None
 b64pic = None
 person_data = {"data": {"personName": None, "personId":None}}
+door_data=None
 pID= ""
 
 @app.route("/event", methods=["POST"])
 def handle_event():
     global received_data
+    global door_data
     try:
         data = request.get_json()
         # received_data = data
@@ -37,16 +39,18 @@ def handle_event():
         person_data["data"]["personId"] = data["params"]["events"][0]["data"][
             "personId"
         ]
+        door_data= data["params"]["events"][0]["srcName"]
         print("Personcode is:"+personCode)
         print("PersonID is:"+person_data["data"]["personId"])
+        print("Door is: "+door_data)
         
          # -------------------------------------------------------------
          ## Below code call the API to find the person information by PersonID
         url = "https://127.0.0.1/artemis/api/resource/v1/person/personCode/personInfo"
         payload = json.dumps({f"personCode": personCode})
         headers = {
-            "x-ca-key": "29902319",
-            "x-ca-signature": "yXZDybyWyUOtCZ6T6QjOGn8qrFp6Cj9rXCclWSyhu5g=",
+            "x-ca-key": "20437019",
+            "x-ca-signature": "+TA2G9MOazY2FbjTQat9LHsDl3Ma9BUV6Q/Gl+RGknc=",
             "x-ca-signature-headers": "x-ca-key",
             "Content-Type": "application/json",
         }
@@ -76,8 +80,8 @@ def handle_event():
             }
         )
         pic_headers = {
-            "x-ca-key": "29902319",
-            "x-ca-signature": "eLWynLKAmBKHEAixbUJvEXseB3Iz+rvZrRQeBKxqm6E=",
+            "x-ca-key": "20437019",
+            "x-ca-signature": "LOSeJnym1JQ4F8SiaOne/EzExD/FpCL/7O1p7ClsjU0=",
             "x-ca-signature-headers": "x-ca-key",
             "Content-Type": "application/json",
         }
@@ -116,11 +120,10 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/images/<filename>")
-def serve_image(filename):
-    return send_from_directory(
-        os.path.join(app.root_path, "static", "images"), filename
-    )
+@app.route("/gate_2", methods=["GET"])
+def gate2():
+    return render_template("gate2.html")
+
 
 
 def generate():
@@ -128,16 +131,14 @@ def generate():
     global pID
     print("personID"+pID)
     while True:
-        #pID=data_final["data"]["personId"]
         # Send the received_data as an SSE event
         if person_data["data"]["personId"] != '-1':
-        #if person_data['data']['personName']:
             json_data = json.dumps(person_data)
             yield f"data: {json_data}\n\n"
             print(json_data)
             person_data["data"]["personName"] = "next"
             person_data["data"]["personId"] = " "
-            #time.sleep(2)
+            time.sleep(1)
             
         else:
              person_data["data"]["personName"] = "Stranger"
@@ -145,29 +146,75 @@ def generate():
              json_data = json.dumps(person_data)
              print(json_data)
              yield f"data: {json_data}\n\n"
-             #person_data["data"]["personId"]= ""
              person_data["data"]["personName"] = "next"
              person_data["data"]["personId"] = " "
-             #time.sleep(2)
+             time.sleep(1)
              
              
-        time.sleep(2)
+        
         
         # yield f"output.jpg"
           # Add a delay to avoid overloading the server
 
 
+def generate_empty():
+    while True:
+        person_data["data"]["personName"] = "next"
+        person_data["data"]["personId"] = " "
+        json_data = json.dumps(person_data)
+        print(json_data)
+        yield f"data: {json_data}\n\n"
+        time.sleep(0.5)
+        
+        
 @app.route("/get_data", methods=["GET"])
 def get_data():
-    return Response(
-        generate(),
-        content_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-        },
-    )
+    #global door_data
+    if door_data == "Door 01":
+        return Response(
+            generate(),
+            content_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+            },
+        )
+    else:
+        return Response(
+            generate_empty(),
+            content_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+            },
+        )
+
+       
+@app.route("/get_data2", methods=["GET"])
+def get_data2():
+    #global door_data
+    if door_data == "Door 2":
+        return Response(
+            generate(),
+            content_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+            },
+        )
+    else:
+        return Response(
+            generate_empty(),
+            content_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+            },
+        )
+
 
 
 if __name__ == "__main__":
     # Change host and port as needed
-    app.run(host="127.0.0.1", port=8089)
+    app.run(host="192.168.249.254", port=8089)
+    
+
+
+
+
