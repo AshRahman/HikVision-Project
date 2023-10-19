@@ -13,6 +13,8 @@ import base64
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+app.debug = True
+
 socketio = SocketIO(app)
 
 # Variable to store the received JSON data
@@ -107,15 +109,20 @@ def handle_event():
 
         person_data["data"]["personName"] = person_name
         person_data["data"]["personId"] = person_id
-        print(person_data["data"]["personName"])
-        print(type(person_data))
+        # print(person_data["data"]["personName"])
+        # print(type(person_data))
             # ---------------------------------------------------------------
         # if person_data["data"]["personId"] != '-1':
-        json_data = json.dumps(person_data)
+        return_data = {
+            "personName": person_name,
+            "personId": person_id,
+            "image_base_64": image_data,
+        }
+        print(image_data)
         if door_data == 'Door 01':
-            socketio.emit('data_event_door_01', data=json_data)
+            socketio.emit('data_event_gate_01', data=return_data)
         elif door_data == 'Door 02':
-            socketio.emit('data_event_door_02', data=json_data)
+            socketio.emit('data_event_gate_02', data=return_data)
         else:
             print(f'Unknown door {door_data}')
         return jsonify({"message": "Event received successfully"}), 200
@@ -126,18 +133,17 @@ def handle_event():
 
 @app.route("/", methods=["GET"])
 def index():
-    # return render_template("index.html")
-    return render_template("index_v2.html")
+    return render_template("gate_1.html")
 
 
 @app.route("/gate_2", methods=["GET"])
 def gate2():
-    return render_template("gate2.html")
+    return render_template("gate_2.html")
 
 
 if __name__ == "__main__":
     # Change host and port as needed
-    socketio.run(app, host="192.168.200.131", port=8089)
+    socketio.run(app, host="192.168.200.56", port=8089)
     
 
 
