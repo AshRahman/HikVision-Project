@@ -110,12 +110,14 @@ def handle_event():
         print(person_data["data"]["personName"])
         print(type(person_data))
             # ---------------------------------------------------------------
-        if person_data["data"]["personId"] != '-1':
-            json_data = json.dumps(person_data)
-            if door_data == 'Door 01':
-                socketio.emit('data_event_door_01', data=json_data)
-            elif door_data == 'Door 02':
-                socketio.emit('data_event_door_02', data=json_data)
+        # if person_data["data"]["personId"] != '-1':
+        json_data = json.dumps(person_data)
+        if door_data == 'Door 01':
+            socketio.emit('data_event_door_01', data=json_data)
+        elif door_data == 'Door 02':
+            socketio.emit('data_event_door_02', data=json_data)
+        else:
+            print(f'Unknown door {door_data}')
         return jsonify({"message": "Event received successfully"}), 200
 
     except Exception as e:

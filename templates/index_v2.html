@@ -41,9 +41,21 @@
     </div>
     <script>
         var socket = io.connect('http://192.168.200.131:8089');
-        socket.on('data_event_door_01', function(data) {
-            // Handle incoming data and update the web page
-            document.getElementById('dynamic-text').innerHTML = JSON.stringify(data['test']);
+        socket.on('data_event_door_01', function(event) {
+            var eventData = JSON.parse(event.data);
+            console.log(eventData);
+            var img = document.getElementById("dynamic-image");
+            var text = document.getElementById("dynamic-text");
+            var id = document.getElementById("dynamic-id");
+
+            img.src =
+              '{{ url_for("static", filename="images") }}/' +
+              eventData.data.personName +
+              ".jpg";
+            //img.src = "/static/images/" + eventData.data.personName + ".jpg";
+            img.alt = eventData.data.personName;
+            text.textContent = " " + eventData.data.personName;
+            id.textContent = " " + eventData.data.personId;
         });
     </script>
 
