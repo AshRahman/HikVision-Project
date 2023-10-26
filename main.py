@@ -10,8 +10,12 @@ import time
 import json
 import requests
 import base64
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+app.debug = True
+
+socketio = SocketIO(app)
 
 # Variable to store the received JSON data
 received_data = None
@@ -43,7 +47,7 @@ def handle_event():
         print("Personcode is:"+personCode)
         print("PersonID is:"+person_data["data"]["personId"])
         print("Door is: "+door_data)
-        
+
          # -------------------------------------------------------------
          ## Below code call the API to find the person information by PersonID
         url = "https://127.0.0.1/artemis/api/resource/v1/person/personCode/personInfo"
@@ -65,11 +69,11 @@ def handle_event():
         person_name = data_final["data"]["personName"]
         pic_uri = data_final["data"]["personPhoto"]["picUri"]
         # Print the extracted values
-        # print("Person ID:", person_id)
-        # print(type(person_id))
-        # print("Person Code:", person_code)
-        # print("Person Name:", person_name)
-        # print("Pic URI:", pic_uri)
+        print("Person ID:", person_id)
+        print(type(person_id))
+        print("Person Code:", person_code)
+        print("Person Name:", person_name)
+        print("Pic URI:", pic_uri)
         # ------------------------------------------------
         ## Picture Fetch API
         pic_url = "https://127.0.0.1/artemis/api/resource/v1/person/picture_data"
@@ -102,13 +106,25 @@ def handle_event():
         with open(f"static/images/{person_name}.jpg", "wb") as f:
             f.write(binary_data)
         print(f"Image saved as '{person_name}.jpg'")
-        
+
         person_data["data"]["personName"] = person_name
         person_data["data"]["personId"] = person_id
-        print(person_data["data"]["personName"])
-        print(type(person_data))
+        # print(person_data["data"]["personName"])
+        # print(type(person_data))
             # ---------------------------------------------------------------
-        
+        # if person_data["data"]["personId"] != '-1':
+        return_data = {
+            "personName": person_name,
+            "personId": person_id,
+            "image_base_64": image_data,
+        }
+        print(door_data)
+        if door_data == 'Door 01':
+            socketio.emit('data_event_gate_01', data=return_data)
+        elif door_data == 'Door 02':
+            socketio.emit('data_event_gate_02', data=return_data)
+        else:
+            print(f'Unknown door {door_data}')
         return jsonify({"message": "Event received successfully"}), 200
 
     except Exception as e:
@@ -117,102 +133,17 @@ def handle_event():
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("gate_1.html")
 
 
 @app.route("/gate_2", methods=["GET"])
 def gate2():
-    return render_template("gate2.html")
-
-
-
-def generate():
-    global b64pic
-    global pID
-    print("personID"+pID)
-    while True:
-        # Send the received_data as an SSE event
-        if person_data["data"]["personId"] != '-1':
-            json_data = json.dumps(person_data)
-            yield f"data: {json_data}\n\n"
-            print(json_data)
-            person_data["data"]["personName"] = "next"
-            person_data["data"]["personId"] = " "
-            time.sleep(1)
-            
-        else:
-             person_data["data"]["personName"] = "Stranger"
-             person_data["data"]["personId"] = ""
-             json_data = json.dumps(person_data)
-             print(json_data)
-             yield f"data: {json_data}\n\n"
-             person_data["data"]["personName"] = "next"
-             person_data["data"]["personId"] = " "
-             time.sleep(1)
-             
-             
-        
-        
-        # yield f"output.jpg"
-          # Add a delay to avoid overloading the server
-
-
-def generate_empty():
-    while True:
-        person_data["data"]["personName"] = "next"
-        person_data["data"]["personId"] = " "
-        json_data = json.dumps(person_data)
-        print(json_data)
-        yield f"data: {json_data}\n\n"
-        time.sleep(1)
-        
-        
-@app.route("/get_data", methods=["GET"])
-def get_data():
-    #global door_data
-    if door_data == "Door 01":
-        return Response(
-            generate(),
-            content_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-            },
-        )
-    else:
-        return Response(
-            generate_empty(),
-            content_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-            },
-        )
-
-       
-@app.route("/get_data2", methods=["GET"])
-def get_data2():
-    #global door_data
-    if door_data == "Door 2":
-        return Response(
-            generate(),
-            content_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-            },
-        )
-    else:
-        return Response(
-            generate_empty(),
-            content_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-            },
-        )
-
+    return render_template("gate_2.html")
 
 
 if __name__ == "__main__":
     # Change host and port as needed
-    app.run(host="192.168.200.56", port=8089)
+    socketio.run(app, host="192.168.200.56", port=8089)
     
 
 
