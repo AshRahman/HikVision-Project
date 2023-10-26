@@ -65,11 +65,11 @@ def handle_event():
         person_name = data_final["data"]["personName"]
         pic_uri = data_final["data"]["personPhoto"]["picUri"]
         # Print the extracted values
-        print("Person ID:", person_id)
-        print(type(person_id))
-        print("Person Code:", person_code)
-        print("Person Name:", person_name)
-        print("Pic URI:", pic_uri)
+        # print("Person ID:", person_id)
+        # print(type(person_id))
+        # print("Person Code:", person_code)
+        # print("Person Name:", person_name)
+        # print("Pic URI:", pic_uri)
         # ------------------------------------------------
         ## Picture Fetch API
         pic_url = "https://127.0.0.1/artemis/api/resource/v1/person/picture_data"

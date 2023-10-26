@@ -30,21 +30,18 @@
           class="card-img-top"
           style="height: 70%"
           alt="Image"
+          src="/static/images/next.jpg"
         />
         <div class="card-body">
-          <h5 class="card-title">Name:</h5>
-          <h5 class="card-text" id="dynamic-text"></h5>
-          <h5 class="card-title">ID:</h5>
-          <h5 class="card-text" id="dynamic-id"></h5>
+          <h5 class="card-title">Name: <span id="dynamic-text"></span></h5>
+          <h5 class="card-title">ID: <span id="dynamic-id"></span></h5>
         </div>
       </div>
     </div>
     <script>
         var socket = io.connect('http://192.168.200.56:8089');
-        socket.on('data_event_gate_02', function(event) {
-          console.log(event)
-            var eventData =event;
-            console.log(eventData);
+        socket.on('data_event_gate_02', function(eventData) {
+  
             var img = document.getElementById("dynamic-image");
             var text = document.getElementById("dynamic-text");
             var id = document.getElementById("dynamic-id");

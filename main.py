@@ -118,7 +118,7 @@ def handle_event():
             "personId": person_id,
             "image_base_64": image_data,
         }
-        print(image_data)
+        print(door_data)
         if door_data == 'Door 01':
             socketio.emit('data_event_gate_01', data=return_data)
         elif door_data == 'Door 02':
