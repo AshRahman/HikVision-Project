@@ -1,61 +1,139 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Access Control</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-    />
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
-    <style>
-      .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        transition: 0.3s;
-        width: 200%;
-        margin: auto;
-        margin-bottom: 20px;
-      }
-      .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container p-4">
-      <div class="card" style="width: 18rem">
-        <img
-          width="50"
-          id="dynamic-image"
-          alt="Dynamic Image"
-          class="card-img-top"
-          style="height: 70%"
-          alt="Image"
-          src="/static/images/next.jpg"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Name: <span id="dynamic-text"></span></h5>
-          <h5 class="card-title">ID: <span id="dynamic-id"></span></h5>
+
+<head>
+  <title>Access Control</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+
+  <style>
+    .small-image-div {
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+
+    .custom-border {
+      border: 1px solid #535151;
+      border-radius: 12px;
+    }
+
+    .custom-background {
+      background-color: #FFFBF5;
+    }
+
+    .span-style {
+      border: 0.5px solid #807e7e;
+      border-radius: 12px;
+      width: fit-content;
+      background-color: #FEF2F4;
+      padding: 4px 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container p-4">
+    <h3 class="display-4 border text-center p-4 rounded-pill mb-4">Capture Image </h3>
+    <div id="image-container" class="row">
+      <div class="col-lg-8 text-center">
+        <div id="last-image-container" class="mb-4 text-center">
+          <!-- Larger container for the last image -->
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div id="small-image-divs" class="d-flex flex-wrap justify-content-center">
+          <!-- smaller image divs (arranged horizontally) -->
         </div>
       </div>
     </div>
-    <script>
-        var socket = io.connect('http://192.168.200.56:8089');
-        socket.on('data_event_gate_02', function(eventData) {
-  
-            var img = document.getElementById("dynamic-image");
-            var text = document.getElementById("dynamic-text");
-            var id = document.getElementById("dynamic-id");
+  </div>
 
-            img.src =
-              '{{ url_for("static", filename="images") }}/' +
-              eventData.personName +
-              ".jpg";
-            //img.src = "/static/images/" + eventData.data.personName + ".jpg";
-            img.alt = eventData.personName;
-            text.textContent = " " + eventData.personName;
-            id.textContent = " " + eventData.personId;
-        });
-    </script>
 
-  </body>
+
+  <script>
+
+    //================> demo start from here ================> 
+
+    var socket = io.connect('http://192.168.200.70:8089');
+    socket.on('data_event_gate_02', function (eventData) {
+
+      var imageUrl = '/static/images/' + eventData.personName + '.jpg';
+
+      var imageDiv = createImageDiv(imageUrl, eventData.personName, eventData.personId);
+      
+      //==============> Append the last image to the "last-image-container" ==========>
+
+      var lastImageContainer = document.getElementById('last-image-container');
+      lastImageContainer.innerHTML = '';
+      lastImageContainer.appendChild(imageDiv);
+
+      var row = lastImageContainer.closest('.row');
+      if (row) {
+        row.classList.add('custom-border', 'custom-background');
+      }
+
+      //=============> Append the smaller image divs to the "small-image-divs" =========>
+
+      var smallImageDivsContainer = document.getElementById('small-image-divs');
+      var smallerImageDiv = createImageDiv(imageUrl, eventData.personName, eventData.personId);
+      smallImageDivsContainer.appendChild(smallerImageDiv);
+
+      var row = smallImageDivsContainer.closest('.row');
+      if (row) {
+        row.classList.add('custom-border', 'custom-background');
+      }
+
+      hideImageAfter5Seconds(smallerImageDiv);
+
+    });
+
+
+    // =======> Hide the image after 5 seconds =======>
+
+    function hideImageAfter5Seconds(imageDiv) {
+      setTimeout(function () {
+        imageDiv.style.display = 'none';
+      }, 200000);
+    }
+
+
+    // =======> Create a new div for each image received from the socket =====>
+
+    function createImageDiv(imageUrl, personName, personId) {
+      var div = document.createElement('div');
+      div.classList.add('small-image-div', 'm-2',);
+
+      var img = document.createElement('img');
+      img.src = imageUrl;
+      img.classList.add('img-fluid');
+
+
+      var nameSpan = document.createElement('span');
+      nameSpan.textContent = 'user name : ' + personName;
+      nameSpan.classList.add('span-style', 'mt-2');
+
+
+      var idSpan = document.createElement('span');
+      idSpan.textContent = 'user ID : ' + personId;
+      idSpan.classList.add('span-style', 'mt-1')
+
+
+      div.appendChild(img);
+      div.appendChild(nameSpan);
+      div.appendChild(idSpan);
+
+      return div;
+    }
+
+
+
+
+  </script>
+
+</body>
+
 </html>

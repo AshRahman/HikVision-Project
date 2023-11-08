@@ -122,7 +122,7 @@ def index():
 
 @app.route("/gate_2", methods=["GET"])
 def gate2():
-    return render_template("gate2.html")
+    return render_template("gate_2.html")
 
 
 

@@ -143,7 +143,7 @@ def gate2():
 
 if __name__ == "__main__":
     # Change host and port as needed
-    socketio.run(app, host="192.168.200.56", port=8089)
+    socketio.run(app, host="192.168.200.70", port=8089)
     
 
 
